@@ -17,36 +17,66 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
 
   // Sample data
   const sampleTasks: Task[] = [
-    // Administrative tasks
-    { id: '1', title: 'Update patient records and sign charts', completed: false, priority: 'high', projectId: 'admin', dueDate: new Date().toISOString().split('T')[0], labels: ['urgent'], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    { id: '2', title: 'Review lab and imaging results', completed: false, priority: 'normal', projectId: 'admin', dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0], labels: ['review'], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    { id: '3', title: 'Complete medical forms or insurance paperwork', completed: false, priority: 'normal', projectId: 'admin', labels: [], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    
     // Clinical tasks
-    { id: '4', title: 'Write or renew prescriptions', completed: false, priority: 'high', projectId: 'clinical', dueDate: new Date().toISOString().split('T')[0], labels: ['urgent'], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    { id: '5', title: 'Order or follow up on diagnostic tests', completed: false, priority: 'normal', projectId: 'clinical', dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], labels: ['follow-up'], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    { id: '6', title: 'Coordinate with nurses or specialists', completed: false, priority: 'normal', projectId: 'clinical', labels: [], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    
-    // Professional tasks
-    { id: '7', title: 'Read new medical updates or guidelines', completed: false, priority: 'low', projectId: 'professional', dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], labels: ['review'], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    { id: '8', title: 'Attend department or team meetings', completed: false, priority: 'normal', projectId: 'professional', dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0], labels: [], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    { id: '9', title: 'Work on research or teaching materials', completed: false, priority: 'low', projectId: 'professional', labels: [], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    
-    // Personal/Management tasks
-    { id: '10', title: 'Check inventory or equipment needs', completed: false, priority: 'normal', projectId: 'personal', dueDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], labels: [], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    { id: '11', title: 'Plan next day\'s rounds or clinic schedule', completed: false, priority: 'high', projectId: 'personal', dueDate: new Date().toISOString().split('T')[0], labels: ['urgent'], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
+    {
+      id: '1',
+      title: 'Cardiology follow-up coordination',
+      completed: false,
+      priority: 'high',
+      projectId: 'clinical',
+      dueDate: new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      labels: ['follow-up'],
+      createdAt: new Date().toISOString(),
+      notes: 'Confirm appointment with cardiologist in 4 weeks. Review any planned revascularization procedure notes or test results.',
+      subtasks: [
+        { id: 's1', title: 'Confirm appointment with cardiologist', completed: false },
+        { id: 's2', title: 'Review revascularization procedure notes', completed: false }
+      ]
+    },
+    {
+      id: '2',
+      title: 'Routine labs',
+      completed: false,
+      priority: 'high',
+      projectId: 'clinical',
+      dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      labels: ['urgent'],
+      createdAt: new Date().toISOString(),
+      notes: 'Repeat HbA1c, lipid panel, and CMP (last checked > 1 year ago). Check urine microalbumin for diabetic nephropathy screening.',
+      subtasks: [
+        { id: 's3', title: 'Order HbA1c, lipid panel, CMP', completed: false },
+        { id: 's4', title: 'Order urine microalbumin', completed: false }
+      ]
+    },
+    {
+      id: '3',
+      title: 'Medication review',
+      completed: false,
+      priority: 'normal',
+      projectId: 'clinical',
+      dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      labels: ['review'],
+      createdAt: new Date().toISOString(),
+      notes: 'Confirm adherence to diabetic, antihypertensive, and statin therapy. Consider dose adjustment if LDL or BP remains above goal.',
+      subtasks: [
+        { id: 's5', title: 'Review medication adherence', completed: false },
+        { id: 's6', title: 'Assess LDL and BP targets', completed: false }
+      ]
+    },
+
+    // Administrative tasks
+    { id: '4', title: 'Update patient records and sign charts', completed: false, priority: 'high', projectId: 'admin', dueDate: new Date().toISOString().split('T')[0], labels: ['urgent'], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
+    { id: '5', title: 'Complete medical forms or insurance paperwork', completed: false, priority: 'normal', projectId: 'admin', labels: [], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
   ];
 
   const projects: Project[] = [
-    { id: 'admin', name: '🧾 Administrative', color: '#3B82F6', taskCount: 3, createdAt: new Date().toISOString() },
+    { id: 'admin', name: '🧾 Administrative', color: '#3B82F6', taskCount: 2, createdAt: new Date().toISOString() },
     { id: 'clinical', name: '🔬 Clinical', color: '#10B981', taskCount: 3, createdAt: new Date().toISOString() },
-    { id: 'professional', name: '📚 Professional', color: '#8B5CF6', taskCount: 3, createdAt: new Date().toISOString() },
-    { id: 'personal', name: '⚙️ Personal / Management', color: '#F59E0B', taskCount: 2, createdAt: new Date().toISOString() },
   ];
 
   const labels: Label[] = [
-    { id: 'urgent', name: 'Urgent', color: '#EF4444', taskCount: 3 },
-    { id: 'review', name: 'Review', color: '#3B82F6', taskCount: 2 },
+    { id: 'urgent', name: 'Urgent', color: '#EF4444', taskCount: 2 },
+    { id: 'review', name: 'Review', color: '#3B82F6', taskCount: 1 },
     { id: 'follow-up', name: 'Follow-up', color: '#10B981', taskCount: 1 },
   ];
 
@@ -86,10 +116,6 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
         return sampleTasks.filter(t => t.projectId === 'admin' && !t.completed);
       case 'project-clinical':
         return sampleTasks.filter(t => t.projectId === 'clinical' && !t.completed);
-      case 'project-professional':
-        return sampleTasks.filter(t => t.projectId === 'professional' && !t.completed);
-      case 'project-personal':
-        return sampleTasks.filter(t => t.projectId === 'personal' && !t.completed);
       default:
         return sampleTasks;
     }
@@ -120,10 +146,6 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
         return '🧾 Administrative';
       case 'project-clinical':
         return '🔬 Clinical';
-      case 'project-professional':
-        return '📚 Professional';
-      case 'project-personal':
-        return '⚙️ Personal / Management';
       default:
         return 'Tasks';
     }
