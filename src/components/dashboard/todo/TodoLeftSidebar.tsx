@@ -12,22 +12,22 @@ interface TodoLeftSidebarProps {
 export function TodoLeftSidebar({ selectedSection, onSectionSelect, onAddTask }: TodoLeftSidebarProps) {
   // Sample data - in a real app this would come from props or context
   const projects: Project[] = [
-    { id: 'john-doe', name: '👤 John Michael Doe', color: '#EF4444', taskCount: 3, createdAt: new Date().toISOString() },
-    { id: 'robert-johnson', name: '👤 Robert Johnson', color: '#F59E0B', taskCount: 3, createdAt: new Date().toISOString() },
-    { id: 'emily-chen', name: '👤 Emily Chen', color: '#8B5CF6', taskCount: 2, createdAt: new Date().toISOString() },
+    { id: 'admin', name: '🧾 Administrative', color: '#3B82F6', taskCount: 3, createdAt: new Date().toISOString() },
+    { id: 'clinical', name: '🔬 Clinical', color: '#10B981', taskCount: 3, createdAt: new Date().toISOString() },
+    { id: 'professional', name: '📚 Professional', color: '#8B5CF6', taskCount: 3, createdAt: new Date().toISOString() },
+    { id: 'personal', name: '⚙️ Personal / Management', color: '#F59E0B', taskCount: 2, createdAt: new Date().toISOString() },
   ];
 
   const labels: Label[] = [
-    { id: 'labs', name: 'Labs', color: '#06B6D4', taskCount: 2 },
-    { id: 'monitoring', name: 'Monitoring', color: '#3B82F6', taskCount: 4 },
+    { id: 'urgent', name: 'Urgent', color: '#EF4444', taskCount: 2 },
+    { id: 'review', name: 'Review', color: '#3B82F6', taskCount: 3 },
     { id: 'follow-up', name: 'Follow-up', color: '#10B981', taskCount: 1 },
-    { id: 'cardiology', name: 'Cardiology', color: '#EF4444', taskCount: 2 },
-    { id: 'diabetes', name: 'Diabetes', color: '#F59E0B', taskCount: 2 },
   ];
 
   const sections = [
-    { id: 'today', title: 'Due Today', icon: 'calendar', count: 0 },
-    { id: 'upcoming', title: 'Due This Week', icon: 'clock', count: 8 },
+    { id: 'inbox', title: 'Inbox', icon: 'inbox', count: 11 },
+    { id: 'today', title: 'Today', icon: 'calendar', count: 5 },
+    { id: 'upcoming', title: 'Upcoming', icon: 'clock', count: 6 },
   ];
 
   return (
@@ -95,9 +95,9 @@ export function TodoLeftSidebar({ selectedSection, onSectionSelect, onAddTask }:
             }`}
           >
             <div className="flex items-center space-x-2 flex-1 min-w-0">
-              <span className="text-sm">👥</span>
+              <span className="text-sm">📁</span>
               <span className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                Patients
+                Projects
               </span>
               <span className="px-1.5 py-0.5 bg-gray-200 dark:bg-gray-700 text-xs text-gray-600 dark:text-gray-400 rounded-full">
                 {projects.length}
