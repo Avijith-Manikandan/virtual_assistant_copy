@@ -13,10 +13,7 @@ interface TodoPanelProps {
 
 export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthChange }: TodoPanelProps) {
   const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
-  const [tasks, setTasks] = useState<Task[]>([]);
-
-  // Initialize tasks on mount
-  useState<Task[]>(() => [
+  const [tasks, setTasks] = useState<Task[]>(() => [
     // Clinical tasks
     {
       id: '1',
