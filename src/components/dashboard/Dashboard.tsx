@@ -23,7 +23,7 @@ export function Dashboard() {
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const [selectedAppointment, setSelectedAppointment] = useState<SelectedAppointment | null>(null);
   const [view, setView] = useState<DashboardView>('calendar');
-  const [selectedTodoSection, setSelectedTodoSection] = useState<string>('inbox');
+  const [selectedTodoSection, setSelectedTodoSection] = useState<string>('upcoming');
 
   const handleSelectAppointment = (patientId: string, appointment: { id: string; time: string; reason: string }) => {
     setSelectedPatientId(patientId);
@@ -58,14 +58,12 @@ export function Dashboard() {
                 <div className="flex-1 overflow-y-auto">
                   <div className="space-y-1">
                     {[
-                      { id: 'inbox', title: 'Inbox', icon: '📥', count: 0 },
-                      { id: 'today', title: 'Today', icon: '📅', count: 5 },
-                      { id: 'upcoming', title: 'Upcoming', icon: '⏰', count: 6 },
-                      { id: 'projects', title: 'Projects', icon: '📁', count: 4 },
-                      { id: 'project-admin', title: '🧾 Administrative', icon: '📋', count: 3 },
-                      { id: 'project-clinical', title: '🔬 Clinical', icon: '📋', count: 3 },
-                      { id: 'project-professional', title: '📚 Professional', icon: '📋', count: 3 },
-                      { id: 'project-personal', title: '⚙️ Personal / Management', icon: '📋', count: 2 },
+                      { id: 'today', title: 'Due Today', icon: '📅', count: 0 },
+                      { id: 'upcoming', title: 'Due This Week', icon: '⏰', count: 8 },
+                      { id: 'projects', title: 'Patients', icon: '👥', count: 3 },
+                      { id: 'project-john-doe', title: '👤 John Michael Doe', icon: '📋', count: 3 },
+                      { id: 'project-robert-johnson', title: '👤 Robert Johnson', icon: '📋', count: 3 },
+                      { id: 'project-emily-chen', title: '👤 Emily Chen', icon: '📋', count: 2 },
                     ].map(section => (
                       <button
                         key={section.id}
