@@ -16,8 +16,7 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
   const [tasks, setTasks] = useState<Task[]>([]);
 
   // Initialize tasks on mount
-  useState(() => {
-    const initialTasks: Task[] = [
+  useState<Task[]>(() => [
     // Clinical tasks
     {
       id: '1',
@@ -68,9 +67,7 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
     // Administrative tasks
     { id: '4', title: 'Update patient records and sign charts', completed: false, priority: 'high', projectId: 'admin', dueDate: new Date().toISOString().split('T')[0], labels: ['urgent'], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
     { id: '5', title: 'Complete medical forms or insurance paperwork', completed: false, priority: 'normal', projectId: 'admin', labels: [], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    ];
-    setTasks(initialTasks);
-  });
+  ]);
 
   const projects: Project[] = [
     { id: 'admin', name: '🧾 Administrative', color: '#3B82F6', taskCount: 2, createdAt: new Date().toISOString() },
@@ -101,22 +98,35 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
   };
 
   const getFilteredTasks = (): Task[] => {
+    let filtered: Task[] = [];
     switch (selectedSection) {
       case 'inbox':
-        return tasks.filter(t => !t.projectId && !t.completed);
+        filtered = tasks.filter(t => !t.projectId);
+        break;
       case 'today':
-        return tasks.filter(t => t.dueDate && isToday(t.dueDate) && !t.completed);
+        filtered = tasks.filter(t => t.dueDate && isToday(t.dueDate));
+        break;
       case 'upcoming':
-        return tasks.filter(t => t.dueDate && isUpcoming(t.dueDate) && !t.completed);
+        filtered = tasks.filter(t => t.dueDate && isUpcoming(t.dueDate));
+        break;
       case 'projects':
-        return tasks.filter(t => t.projectId && !t.completed);
+        filtered = tasks.filter(t => t.projectId);
+        break;
       case 'project-admin':
-        return tasks.filter(t => t.projectId === 'admin' && !t.completed);
+        filtered = tasks.filter(t => t.projectId === 'admin');
+        break;
       case 'project-clinical':
-        return tasks.filter(t => t.projectId === 'clinical' && !t.completed);
+        filtered = tasks.filter(t => t.projectId === 'clinical');
+        break;
       default:
-        return tasks;
+        filtered = tasks;
     }
+
+    // Sort: incomplete first, then completed
+    return filtered.sort((a, b) => {
+      if (a.completed === b.completed) return 0;
+      return a.completed ? 1 : -1;
+    });
   };
 
   function isToday(date: string): boolean {

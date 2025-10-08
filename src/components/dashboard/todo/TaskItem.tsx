@@ -43,8 +43,10 @@ export function TaskItem({ task, onClick, onUpdate, onDelete, labels, isExpanded
   };
 
   const handleTitleClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsEditing(true);
+    if (e.detail === 2) {
+      e.stopPropagation();
+      setIsEditing(true);
+    }
   };
 
   const handleTitleSubmit = () => {
@@ -140,7 +142,7 @@ export function TaskItem({ task, onClick, onUpdate, onDelete, labels, isExpanded
         </button>
 
         {/* Task content */}
-        <div className="flex-1 min-w-0 cursor-pointer" onClick={onClick}>
+        <div className="flex-1 min-w-0" onClick={onClick}>
           {isEditing ? (
             <input
               ref={inputRef}
@@ -153,12 +155,12 @@ export function TaskItem({ task, onClick, onUpdate, onDelete, labels, isExpanded
             />
           ) : (
             <div
-              className={`text-sm cursor-pointer ${
+              className={`text-sm ${
                 task.completed
                   ? 'line-through text-gray-500 dark:text-gray-400'
                   : 'text-gray-900 dark:text-white'
               }`}
-              onClick={handleTitleClick}
+              onDoubleClick={handleTitleClick}
             >
               {task.title}
             </div>
@@ -310,6 +312,10 @@ export function TaskItem({ task, onClick, onUpdate, onDelete, labels, isExpanded
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
+                      const updatedSubtasks = task.subtasks?.map(st =>
+                        st.id === subtask.id ? { ...st, completed: !st.completed } : st
+                      );
+                      onUpdate({ ...task, subtasks: updatedSubtasks });
                     }}
                     className={`w-3 h-3 rounded border flex items-center justify-center flex-shrink-0 ${
                       subtask.completed
