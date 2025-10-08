@@ -14,67 +14,157 @@ interface TodoPanelProps {
 export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthChange }: TodoPanelProps) {
   const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
   const [tasks, setTasks] = useState<Task[]>(() => [
-    // Clinical tasks
+    // John Michael Doe tasks
     {
       id: '1',
-      title: 'Cardiology follow-up coordination',
+      title: 'Review renal function and repeat labs',
       completed: false,
       priority: 'high',
-      projectId: 'clinical',
-      dueDate: new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      labels: ['follow-up'],
+      projectId: 'john-doe',
+      dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      labels: ['labs', 'monitoring'],
       createdAt: new Date().toISOString(),
-      notes: 'Confirm appointment with cardiologist in 4 weeks. Review any planned revascularization procedure notes or test results.',
+      notes: 'Review John Michael Doe\'s latest renal function (eGFR 68) and repeat labs in 2 weeks to monitor for medication-related kidney impact after starting Metoprolol and Clopidogrel.',
       subtasks: [
-        { id: 's1', title: 'Confirm appointment with cardiologist', completed: false },
-        { id: 's2', title: 'Review revascularization procedure notes', completed: false }
+        { id: 's1', title: 'Review current eGFR 68', completed: false },
+        { id: 's2', title: 'Order repeat BMP and renal function', completed: false },
+        { id: 's3', title: 'Assess medication dosing', completed: false }
       ]
     },
     {
       id: '2',
-      title: 'Routine labs',
+      title: 'Confirm cardiology follow-up appointment',
       completed: false,
       priority: 'high',
-      projectId: 'clinical',
-      dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      labels: ['urgent'],
+      projectId: 'john-doe',
+      dueDate: '2025-10-25',
+      labels: ['follow-up', 'cardiology'],
       createdAt: new Date().toISOString(),
-      notes: 'Repeat HbA1c, lipid panel, and CMP (last checked > 1 year ago). Check urine microalbumin for diabetic nephropathy screening.',
+      notes: 'Confirm John Michael Doe\'s cardiology follow-up appointment scheduled for 2025-11-01 and ensure cardiac rehab referral is active.',
       subtasks: [
-        { id: 's3', title: 'Order HbA1c, lipid panel, CMP', completed: false },
-        { id: 's4', title: 'Order urine microalbumin', completed: false }
+        { id: 's4', title: 'Verify appointment on 2025-11-01', completed: false },
+        { id: 's5', title: 'Check cardiac rehab referral status', completed: false }
       ]
     },
     {
       id: '3',
-      title: 'Medication review',
+      title: 'Review BP and symptom diary',
       completed: false,
       priority: 'normal',
-      projectId: 'clinical',
-      dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      labels: ['review'],
+      projectId: 'john-doe',
+      dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      labels: ['monitoring', 'cardiology'],
       createdAt: new Date().toISOString(),
-      notes: 'Confirm adherence to diabetic, antihypertensive, and statin therapy. Consider dose adjustment if LDL or BP remains above goal.',
+      notes: 'Review John Michael Doe\'s blood pressure and symptom diary for any new chest discomfort, fatigue, or weight gain suggestive of heart-failure progression.',
       subtasks: [
-        { id: 's5', title: 'Review medication adherence', completed: false },
-        { id: 's6', title: 'Assess LDL and BP targets', completed: false }
+        { id: 's6', title: 'Review home BP readings', completed: false },
+        { id: 's7', title: 'Assess for chest discomfort or fatigue', completed: false },
+        { id: 's8', title: 'Check for weight gain trends', completed: false }
       ]
     },
 
-    // Administrative tasks
-    { id: '4', title: 'Update patient records and sign charts', completed: false, priority: 'high', projectId: 'admin', dueDate: new Date().toISOString().split('T')[0], labels: ['urgent'], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-    { id: '5', title: 'Complete medical forms or insurance paperwork', completed: false, priority: 'normal', projectId: 'admin', labels: [], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
+    // Robert Johnson tasks
+    {
+      id: '4',
+      title: 'Order annual diabetes monitoring labs',
+      completed: false,
+      priority: 'high',
+      projectId: 'robert-johnson',
+      dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      labels: ['labs', 'diabetes'],
+      createdAt: new Date().toISOString(),
+      notes: 'Order updated HbA1c, lipid panel, and urine microalbumin for Robert Johnson as part of annual diabetes monitoring (last labs >1 year ago).',
+      subtasks: [
+        { id: 's9', title: 'Order HbA1c', completed: false },
+        { id: 's10', title: 'Order lipid panel', completed: false },
+        { id: 's11', title: 'Order urine microalbumin', completed: false }
+      ]
+    },
+    {
+      id: '5',
+      title: 'Schedule diabetic retinal and foot exams',
+      completed: false,
+      priority: 'normal',
+      projectId: 'robert-johnson',
+      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      labels: ['screening', 'diabetes'],
+      createdAt: new Date().toISOString(),
+      notes: 'Verify Robert Johnson has completed annual diabetic retinal and foot exams or schedule them within the next month.',
+      subtasks: [
+        { id: 's12', title: 'Check retinal exam completion', completed: false },
+        { id: 's13', title: 'Check foot exam completion', completed: false },
+        { id: 's14', title: 'Schedule any missing exams', completed: false }
+      ]
+    },
+    {
+      id: '6',
+      title: 'Review home BP readings and adjust meds',
+      completed: false,
+      priority: 'normal',
+      projectId: 'robert-johnson',
+      dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      labels: ['monitoring', 'hypertension'],
+      createdAt: new Date().toISOString(),
+      notes: 'Review Robert Johnson\'s home blood pressure readings and adjust antihypertensive regimen if average >130/80 mmHg.',
+      subtasks: [
+        { id: 's15', title: 'Review BP log', completed: false },
+        { id: 's16', title: 'Calculate average BP', completed: false },
+        { id: 's17', title: 'Adjust medications if needed', completed: false }
+      ]
+    },
+
+    // Emily Chen tasks
+    {
+      id: '7',
+      title: 'Reassess peak flow after steroid taper',
+      completed: false,
+      priority: 'high',
+      projectId: 'emily-chen',
+      dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      labels: ['monitoring', 'asthma'],
+      createdAt: new Date().toISOString(),
+      notes: 'Reassess Emily Chen\'s peak flow measurement after steroid taper (previous 380 L/min, goal ≥450) to evaluate asthma control.',
+      subtasks: [
+        { id: 's18', title: 'Measure peak flow', completed: false },
+        { id: 's19', title: 'Compare to goal of ≥450 L/min', completed: false },
+        { id: 's20', title: 'Adjust treatment if suboptimal', completed: false }
+      ]
+    },
+    {
+      id: '8',
+      title: 'Evaluate allergy management plan',
+      completed: false,
+      priority: 'normal',
+      projectId: 'emily-chen',
+      dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      labels: ['review', 'allergy'],
+      createdAt: new Date().toISOString(),
+      notes: 'Evaluate Emily Chen\'s allergy management plan — consider adding montelukast or antihistamine for elevated IgE (250 IU/mL) and seasonal triggers.',
+      subtasks: [
+        { id: 's21', title: 'Review IgE levels (250 IU/mL)', completed: false },
+        { id: 's22', title: 'Assess seasonal trigger patterns', completed: false },
+        { id: 's23', title: 'Consider montelukast or antihistamine', completed: false }
+      ]
+    },
   ]);
 
   const projects: Project[] = [
-    { id: 'admin', name: '🧾 Administrative', color: '#3B82F6', taskCount: 2, createdAt: new Date().toISOString() },
-    { id: 'clinical', name: '🔬 Clinical', color: '#10B981', taskCount: 3, createdAt: new Date().toISOString() },
+    { id: 'john-doe', name: '👤 John Michael Doe', color: '#EF4444', taskCount: 3, createdAt: new Date().toISOString() },
+    { id: 'robert-johnson', name: '👤 Robert Johnson', color: '#F59E0B', taskCount: 3, createdAt: new Date().toISOString() },
+    { id: 'emily-chen', name: '👤 Emily Chen', color: '#8B5CF6', taskCount: 2, createdAt: new Date().toISOString() },
   ];
 
   const labels: Label[] = [
-    { id: 'urgent', name: 'Urgent', color: '#EF4444', taskCount: 2 },
-    { id: 'review', name: 'Review', color: '#3B82F6', taskCount: 1 },
+    { id: 'labs', name: 'Labs', color: '#06B6D4', taskCount: 2 },
+    { id: 'monitoring', name: 'Monitoring', color: '#3B82F6', taskCount: 4 },
     { id: 'follow-up', name: 'Follow-up', color: '#10B981', taskCount: 1 },
+    { id: 'cardiology', name: 'Cardiology', color: '#EF4444', taskCount: 2 },
+    { id: 'diabetes', name: 'Diabetes', color: '#F59E0B', taskCount: 2 },
+    { id: 'screening', name: 'Screening', color: '#8B5CF6', taskCount: 1 },
+    { id: 'hypertension', name: 'Hypertension', color: '#EC4899', taskCount: 1 },
+    { id: 'asthma', name: 'Asthma', color: '#14B8A6', taskCount: 1 },
+    { id: 'allergy', name: 'Allergy', color: '#A855F7', taskCount: 1 },
+    { id: 'review', name: 'Review', color: '#6366F1', taskCount: 1 },
   ];
 
   const handleTaskClick = (task: Task) => {
@@ -109,11 +199,14 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
       case 'projects':
         filtered = tasks.filter(t => t.projectId);
         break;
-      case 'project-admin':
-        filtered = tasks.filter(t => t.projectId === 'admin');
+      case 'project-john-doe':
+        filtered = tasks.filter(t => t.projectId === 'john-doe');
         break;
-      case 'project-clinical':
-        filtered = tasks.filter(t => t.projectId === 'clinical');
+      case 'project-robert-johnson':
+        filtered = tasks.filter(t => t.projectId === 'robert-johnson');
+        break;
+      case 'project-emily-chen':
+        filtered = tasks.filter(t => t.projectId === 'emily-chen');
         break;
       default:
         filtered = tasks;
@@ -147,10 +240,12 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
         return 'Upcoming';
       case 'projects':
         return 'All Projects';
-      case 'project-admin':
-        return '🧾 Administrative';
-      case 'project-clinical':
-        return '🔬 Clinical';
+      case 'project-john-doe':
+        return '👤 John Michael Doe';
+      case 'project-robert-johnson':
+        return '👤 Robert Johnson';
+      case 'project-emily-chen':
+        return '👤 Emily Chen';
       default:
         return 'Tasks';
     }
