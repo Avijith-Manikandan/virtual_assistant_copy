@@ -187,9 +187,6 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
   const getFilteredTasks = (): Task[] => {
     let filtered: Task[] = [];
     switch (selectedSection) {
-      case 'inbox':
-        filtered = tasks.filter(t => !t.projectId);
-        break;
       case 'today':
         filtered = tasks.filter(t => t.dueDate && isToday(t.dueDate));
         break;
@@ -232,14 +229,12 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
 
   const getSectionTitle = () => {
     switch (selectedSection) {
-      case 'inbox':
-        return 'Inbox';
       case 'today':
-        return 'Today';
+        return 'Due Today';
       case 'upcoming':
-        return 'Upcoming';
+        return 'Due This Week';
       case 'projects':
-        return 'All Projects';
+        return 'All Patients';
       case 'project-john-doe':
         return '👤 John Michael Doe';
       case 'project-robert-johnson':
