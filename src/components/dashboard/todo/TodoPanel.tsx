@@ -12,11 +12,12 @@ interface TodoPanelProps {
 }
 
 export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthChange }: TodoPanelProps) {
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const [showDetails, setShowDetails] = useState(false);
+  const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  // Sample data
-  const sampleTasks: Task[] = [
+  // Initialize tasks on mount
+  useState(() => {
+    const initialTasks: Task[] = [
     // Clinical tasks
     {
       id: '1',
@@ -67,7 +68,9 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
     // Administrative tasks
     { id: '4', title: 'Update patient records and sign charts', completed: false, priority: 'high', projectId: 'admin', dueDate: new Date().toISOString().split('T')[0], labels: ['urgent'], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
     { id: '5', title: 'Complete medical forms or insurance paperwork', completed: false, priority: 'normal', projectId: 'admin', labels: [], createdAt: new Date().toISOString(), notes: '', subtasks: [] },
-  ];
+    ];
+    setTasks(initialTasks);
+  });
 
   const projects: Project[] = [
     { id: 'admin', name: '🧾 Administrative', color: '#3B82F6', taskCount: 2, createdAt: new Date().toISOString() },
@@ -81,43 +84,38 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
   ];
 
   const handleTaskClick = (task: Task) => {
-    setSelectedTask(task);
-    setShowDetails(true);
+    setExpandedTaskId(expandedTaskId === task.id ? null : task.id);
   };
 
   const handleTaskUpdate = (updatedTask: Task) => {
-    // In a real app, this would update the task in the state
-    console.log('Task updated:', updatedTask);
-    if (selectedTask?.id === updatedTask.id) {
-      setSelectedTask(updatedTask);
-    }
+    setTasks(prevTasks =>
+      prevTasks.map(t => t.id === updatedTask.id ? updatedTask : t)
+    );
   };
 
   const handleTaskDelete = (taskId: string) => {
-    // In a real app, this would remove the task from the state
-    console.log('Task deleted:', taskId);
-    if (selectedTask?.id === taskId) {
-      setSelectedTask(null);
-      setShowDetails(false);
+    setTasks(prevTasks => prevTasks.filter(t => t.id !== taskId));
+    if (expandedTaskId === taskId) {
+      setExpandedTaskId(null);
     }
   };
 
   const getFilteredTasks = (): Task[] => {
     switch (selectedSection) {
       case 'inbox':
-        return sampleTasks.filter(t => !t.projectId && !t.completed);
+        return tasks.filter(t => !t.projectId && !t.completed);
       case 'today':
-        return sampleTasks.filter(t => t.dueDate && isToday(t.dueDate) && !t.completed);
+        return tasks.filter(t => t.dueDate && isToday(t.dueDate) && !t.completed);
       case 'upcoming':
-        return sampleTasks.filter(t => t.dueDate && isUpcoming(t.dueDate) && !t.completed);
+        return tasks.filter(t => t.dueDate && isUpcoming(t.dueDate) && !t.completed);
       case 'projects':
-        return sampleTasks.filter(t => t.projectId && !t.completed);
+        return tasks.filter(t => t.projectId && !t.completed);
       case 'project-admin':
-        return sampleTasks.filter(t => t.projectId === 'admin' && !t.completed);
+        return tasks.filter(t => t.projectId === 'admin' && !t.completed);
       case 'project-clinical':
-        return sampleTasks.filter(t => t.projectId === 'clinical' && !t.completed);
+        return tasks.filter(t => t.projectId === 'clinical' && !t.completed);
       default:
-        return sampleTasks;
+        return tasks;
     }
   };
 
@@ -193,24 +191,13 @@ export function TodoPanel({ selectedSection, isOpen, onToggle, width, onWidthCha
                   onUpdate={handleTaskUpdate}
                   onDelete={handleTaskDelete}
                   labels={labels}
+                  isExpanded={expandedTaskId === task.id}
                 />
               ))}
             </div>
           )}
         </div>
       </div>
-
-      {/* Task Details Drawer */}
-      {showDetails && selectedTask && (
-        <TaskDetails
-          task={selectedTask}
-          onClose={() => setShowDetails(false)}
-          onUpdate={handleTaskUpdate}
-          onDelete={handleTaskDelete}
-          projects={projects}
-          labels={labels}
-        />
-      )}
     </>
   );
 }

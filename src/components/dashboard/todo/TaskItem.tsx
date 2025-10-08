@@ -8,9 +8,10 @@ interface TaskItemProps {
   onUpdate: (task: Task) => void;
   onDelete: (taskId: string) => void;
   labels: Label[];
+  isExpanded: boolean;
 }
 
-export function TaskItem({ task, onClick, onUpdate, onDelete, labels }: TaskItemProps) {
+export function TaskItem({ task, onClick, onUpdate, onDelete, labels, isExpanded }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
   const [showMenu, setShowMenu] = useState(false);
@@ -36,9 +37,9 @@ export function TaskItem({ task, onClick, onUpdate, onDelete, labels }: TaskItem
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    onUpdate({ ...task, completed: e.target.checked });
+    onUpdate({ ...task, completed: !task.completed });
   };
 
   const handleTitleClick = (e: React.MouseEvent) => {
@@ -128,7 +129,7 @@ export function TaskItem({ task, onClick, onUpdate, onDelete, labels }: TaskItem
         {/* Checkbox */}
         <button
           onClick={handleCheckboxChange}
-          className={`mt-0.5 w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
+          className={`mt-0.5 w-4 h-4 rounded border-2 flex items-center justify-center transition-colors flex-shrink-0 ${
             task.completed
               ? 'bg-healthcare-500 border-healthcare-500 text-white'
               : 'border-gray-300 dark:border-gray-600 hover:border-healthcare-500'
@@ -139,7 +140,7 @@ export function TaskItem({ task, onClick, onUpdate, onDelete, labels }: TaskItem
         </button>
 
         {/* Task content */}
-        <div className="flex-1 min-w-0" onClick={onClick}>
+        <div className="flex-1 min-w-0 cursor-pointer" onClick={onClick}>
           {isEditing ? (
             <input
               ref={inputRef}
@@ -164,7 +165,8 @@ export function TaskItem({ task, onClick, onUpdate, onDelete, labels }: TaskItem
           )}
 
           {/* Meta row */}
-          <div className="flex items-center space-x-2 mt-1">
+          {!isExpanded && (
+            <div className="flex items-center space-x-2 mt-1">
             {/* Priority indicator */}
             {task.priority !== 'normal' && (
               <Flag className={`w-3 h-3 ${getPriorityColor(task.priority)}`} />
@@ -210,7 +212,8 @@ export function TaskItem({ task, onClick, onUpdate, onDelete, labels }: TaskItem
                 {task.notes}
               </span>
             )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Right side actions */}
@@ -294,6 +297,67 @@ export function TaskItem({ task, onClick, onUpdate, onDelete, labels }: TaskItem
           </div>
         </div>
       </div>
+
+      {/* Expanded details */}
+      {isExpanded && (
+        <div className="mt-3 ml-6 space-y-3 border-t border-gray-200 dark:border-gray-700 pt-3">
+          {/* Subtasks */}
+          {task.subtasks && task.subtasks.length > 0 && (
+            <div className="space-y-2">
+              <div className="text-xs font-medium text-gray-500 dark:text-gray-400">Subtasks</div>
+              {task.subtasks.map(subtask => (
+                <div key={subtask.id} className="flex items-center space-x-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    className={`w-3 h-3 rounded border flex items-center justify-center flex-shrink-0 ${
+                      subtask.completed
+                        ? 'bg-healthcare-500 border-healthcare-500 text-white'
+                        : 'border-gray-300 dark:border-gray-600 hover:border-healthcare-500'
+                    }`}
+                  >
+                    {subtask.completed && <Check className="w-2 h-2" />}
+                  </button>
+                  <span className={`text-sm ${
+                    subtask.completed
+                      ? 'line-through text-gray-500 dark:text-gray-400'
+                      : 'text-gray-700 dark:text-gray-300'
+                  }`}>
+                    {subtask.title}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Notes */}
+          {task.notes && (
+            <div className="space-y-1">
+              <div className="text-xs font-medium text-gray-500 dark:text-gray-400">Notes</div>
+              <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                {task.notes}
+              </p>
+            </div>
+          )}
+
+          {/* Meta information */}
+          <div className="flex items-center space-x-3 text-xs text-gray-500 dark:text-gray-400">
+            {task.dueDate && (
+              <div className="flex items-center space-x-1">
+                <Clock className="w-3 h-3" />
+                <span>Due: {formatDueDate(task.dueDate)}</span>
+              </div>
+            )}
+            {task.priority !== 'normal' && (
+              <div className="flex items-center space-x-1">
+                <Flag className={`w-3 h-3 ${getPriorityColor(task.priority)}`} />
+                <span className="capitalize">{task.priority} priority</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
